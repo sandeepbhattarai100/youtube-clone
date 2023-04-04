@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const { create } = require('../models/User.model');
+
 const User = require('../models/User.model');
 const createError = require('../utils/createError');
+const Video = require('../models/Video.model');
 const updateUser = async (req, res, next) => {
     if (req.params.id === req.user.id) {
         try {
@@ -72,6 +72,38 @@ const unsubscribe = async (req, res, next) => {
 
     }
 };
-const like = async (req, res, next) => { };
-const dislike = async (req, res, next) => { };
+const like = async (req, res, next) => {
+    const id = req.user.id;
+    const videoId = req.params.videoId;
+    console.log(videoId);
+    try {
+        const video = await Video.findByIdAndUpdate(videoId, {
+            $addToSet: { likes: id },
+            $pull: { dislikes: id },
+
+        },
+        );
+        console.log(video);
+        res.status(200).json("the video has been liked");
+
+    } catch (err) {
+        next(err);
+
+    }
+};
+const dislike = async (req, res, next) => {
+    const id = req.user.id;
+    const videoId = req.param.id;
+    try {
+        await Video.findByIdAndUpdate(videoId, {
+            $addToSet: { dislikes: req.params.id },
+            $pull: { likes: req.params.id }
+        });
+        res.status(200).json("the video has been disliked");
+
+    } catch (err) {
+        next(err);
+
+    }
+};
 module.exports = { updateUser, deleteUser, getUser, subscribe, unsubscribe, like, dislike };

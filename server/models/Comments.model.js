@@ -7,14 +7,14 @@ const CommentSchema = mongoose.Schema({
     },
     videoId: {
         type: String,
-required:true,
+        required: true,
     },
     desc: {
         type: String,
-required:true,
+        required: true,
     },
 
 
-},{timeStamps:true});
+}, { timeStamps: true });
 
 module.exports = mongoose.model('Comment', CommentSchema);

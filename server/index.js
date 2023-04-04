@@ -6,6 +6,7 @@ const dotenv = require('dotenv').config();
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const videoRoutes = require('./routes/video.routes');
+const commentRoutes = require('./routes/comments.routes');
 
 const app = express();
 const connect = async () => {
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/video', videoRoutes);
+app.use('/api/comment', commentRoutes);
 
 app.use((err, req, res, next) => {
     const statusCode = err.status || 500;
