@@ -4,8 +4,13 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/userSlice";
 
 const NavBar = () => {
+
+
+
   return (
     <Container>
       <Wrapper>
@@ -16,7 +21,8 @@ const NavBar = () => {
         <Right>
           <VideoCallOutlinedIcon />
           <NotificationsOutlinedIcon />
-          <AccountCircleOutlinedIcon />
+          <AccountCircleOutlinedIcon
+          />
         </Right>
       </Wrapper>
     </Container>
@@ -33,7 +39,7 @@ const Container = styled.div`
   box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
   padding-top: 20px;
   background-color: ${({ theme }) => theme.bg};
-  color:${({theme})=>theme.text};
+  color: ${({ theme }) => theme.text};
 `;
 
 const Wrapper = styled.div`

@@ -1,22 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-const VideoCard = ({ type }) => {
+const VideoCard = ({ type, video }) => {
+  const [channel, setChannel] = useState({});
+
+  useEffect(() => {
+    const fetchChannel = async () => {
+      const res = await axios.get(`http://localhost:8080/api/user/${video.userId}`);
+      setChannel(res.data);
+    };
+    fetchChannel();
+  }, [video.userId]);
+
+
   return (
-    <Link to="/video/test" style={{ textDecoration: "none" }}>
+    <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
       <Container type={type}>
-        <Image
-          type={type}
-          src="https://media.istockphoto.com/id/901169654/photo/lens-image-dslr-manhattan-downtown-city-new-york-hand.jpg?s=612x612&w=0&k=20&c=H2JN9owyOSsGp_SPbwKJKk5iiGg7_g6VzVNxKeRlWNw="
-        />
+        <Image type={type} src={video.imageUrl} />
         <Details>
-          <ChannelImage src="https://images.unsplash.com/file-1661973760703-91f50df21c28image?dpr=2&auto=format&fit=crop&w=416&q=60" />
+          <ChannelImage src={channel.img} />
 
           <Information>
-            <Title type={type}>Happening in 2023</Title>
-            <ChannelName type={type}>Freecodecamp.org</ChannelName>
-            <Texts type={type}>660,908 views • 1 day ago</Texts>
+            <Title type={type}>{video.title}</Title>
+            <ChannelName type={type}>{channel.name}</ChannelName>
+            <Texts type={type}>{video.views} views • 1 day ago</Texts>
           </Information>
         </Details>
       </Container>

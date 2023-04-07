@@ -64,14 +64,14 @@ const trend = async (req, res, next) => {
         next(err);
     }
 };
-const random = async (req, res, next) => {
+ const random = async (req, res, next) => {
     try {
-        const video = Video.aggregate([{ $sample: { size: 40 } }]);
-        res.status(200).json(video);
+      const videos = await Video.aggregate([{ $sample: { size: 40 } }]);
+      res.status(200).json(videos);
     } catch (err) {
-        next(err);
+      next(err);
     }
-};
+  };
 //subscribed channels ko video
 
 const subchannels = async (req, res, next) => {

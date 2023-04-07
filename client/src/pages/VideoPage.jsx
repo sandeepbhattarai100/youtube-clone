@@ -1,12 +1,45 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import styled from "styled-components";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownAltOutlinedIcon from "@mui/icons-material/ThumbDownAltOutlined";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import Comments from "../components/Comments";
 import VideoCard from "../components/VideoCard";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import { useLocation } from "react-router-dom";
+import axios from 'axios';
+import { fetchSuccess } from "../redux/videoSlice";
+import { useDispatch,useSelector } from 'react-redux';
+
 const VideoPage = () => {
+  const { user } = useSelector(state => state.user);
+  const { video } = useSelector(state => state.video);
+  const path = useLocation().pathname.split("/")[2];//yesma video id cha console and check
+
+  const [channel, setChannel] = useState({});
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+      try {
+        const videoRes = await axios.get(`http://localhost:8080/api/video/find/${path}`);
+        const channelRes = await axios.get(`http://localhost:8080/api/user/${videoRes.data.userId}`);
+        setChannel(channelRes.data);
+        dispatch(fetchSuccess(videoRes.data));
+
+
+      } catch (error) {
+
+      }
+
+    }
+    fetchData();
+  }, [path]);
+
+
   return (
     <Container>
       <Content>
@@ -20,48 +53,42 @@ const VideoPage = () => {
             allowfullscreen
           ></iframe>
         </VideoWrapper>
-        <Title>The best video to watch this summer || 2023 enjoy!!</Title>
+        <Title>{video.title}</Title>
         <VideoDetails>
           <ChannelDetails>
             <Left>
-              <Image src="https://media.istockphoto.com/id/873620504/photo/young-woman-in-heart-shape-cave-towards-the-idyllic-sunrise.jpg?s=612x612&w=0&k=20&c=3yi3-SKjlRLwWh3FZDUg9Zgpge5Fuh7fmKQTm9c36fo=" />
+              <Image src={channel.imgUrl} />
               <ChannelName>
-                <ChannelTitle> Sandeep Bhattarai</ChannelTitle>
-                <Sub>245.6k subscribers</Sub>
+                <ChannelTitle>{channel.name} </ChannelTitle>
+                <Sub>{video.views} views</Sub>
               </ChannelName>
             </Left>
             <Middle>
               <Button>Subscribe</Button>
             </Middle>
             <Right>
+
               <LikeDislike>
-                <ThumbUpOutlinedIcon />
-                like
+{video.likes?.includes(user._id ) ?<ThumbUpAltIcon/>:    <ThumbUpOutlinedIcon />}
 
-
+                like {video.likes?.length}
               </LikeDislike>
               <LikeDislike>
-              <ThumbDownAltOutlinedIcon />
+{video.dislikes.includes(user._id)? <ThumbDownIcon/>: <ThumbDownAltOutlinedIcon />}
+
               </LikeDislike>
               <Share></Share>
               <More></More>
             </Right>
           </ChannelDetails>
           <Description>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste
-            cupiditate atque molestiae fuga, pariatur praesentium culpa magnam
-            voluptatum tenetur ullam. Lorem ipsum dolor, sit amet consectetur
-            adipisicing elit. Iste cupiditate atque molestiae fuga, pariatur
-            praesentium culpa magnam voluptatum tenetur ullam. Lorem ipsum
-            dolor, sit amet consectetur adipisicing elit. Iste cupiditate atque
-            molestiae fuga, pariatur praesentium culpa magnam voluptatum tenetur
-            ullam.
+         {video.desc}
           </Description>
         </VideoDetails>
         <Comments />
       </Content>
 
-      <Recommendations>
+      {/* <Recommendations>
         <VideoCard type="sm" />
         <VideoCard type="sm" />
         <VideoCard type="sm" />
@@ -77,7 +104,7 @@ const VideoPage = () => {
         <VideoCard type="sm" />
         <VideoCard type="sm" />
 
-      </Recommendations>
+      </Recommendations> */}
     </Container>
   );
 };
@@ -86,7 +113,7 @@ export default VideoPage;
 
 const Container = styled.div`
   display: flex;
-  gap:20px;
+  gap: 20px;
 `;
 const Content = styled.div`
   flex: 5;
@@ -148,7 +175,7 @@ const Right = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap:10px;
+  gap: 10px;
 `;
 
 const H = styled.span`

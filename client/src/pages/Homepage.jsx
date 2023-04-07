@@ -1,34 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import VideoCard from "../components/VideoCard";
+import axios from "axios";
 
-const Homepage = () => {
+const Homepage = ({type}) => {
+  const [video, setVideo] = useState([]);
+
+  useEffect(() => {
+    const fetchVideo = async () => {
+      const res = await axios.get(`http://localhost:8080/api/video/${type}`);
+      setVideo(res.data);
+
+    };
+    fetchVideo();
+  }, [type]);
+
   return (
     <Container>
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-      <VideoCard />
-
+      {video.map((video) => (
+        <VideoCard key={video._id} video={video} />
+      ))}
     </Container>
   );
 };
@@ -36,7 +27,8 @@ const Homepage = () => {
 export default Homepage;
 
 const Container = styled.div`
-display:flex;
-justify-content: space-between;
-flex-wrap:wrap;
-padding-top:10px`;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-top: 10px;
+`;

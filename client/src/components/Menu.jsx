@@ -4,9 +4,6 @@ import { Link } from "react-router-dom";
 import HouseIcon from "@mui/icons-material/House";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import LocalFireDepartmentOutlinedIcon from "@mui/icons-material/LocalFireDepartmentOutlined";
-import HeadphonesOutlinedIcon from "@mui/icons-material/HeadphonesOutlined";
-import SportsEsportsOutlinedIcon from "@mui/icons-material/SportsEsportsOutlined";
-import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import VideoLibraryOutlinedIcon from "@mui/icons-material/VideoLibraryOutlined";
 import SmartDisplayOutlinedIcon from "@mui/icons-material/SmartDisplayOutlined";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
@@ -15,8 +12,9 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import FeedbackOutlinedIcon from "@mui/icons-material/FeedbackOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { color } from "@mui/system";
+import {useSelector} from 'react-redux';
 const Menu = ({ darkMode, setDarkMode }) => {
+  const { user } = useSelector(state => state.user);
   return (
     <Container>
       <Wrapper>
@@ -34,10 +32,12 @@ const Menu = ({ darkMode, setDarkMode }) => {
           Home
         </Items>
         <hr />
+        <Link to="/subscriptions" style={{textDecoration:"none" ,color:"inherit"}}>
         <Items>
           <VideoLibraryOutlinedIcon />
-          Library
-        </Items>
+          Subscriptions
+          </Items>
+          </Link>
         <Items>
           <HistoryOutlinedIcon />
           History
@@ -51,11 +51,13 @@ const Menu = ({ darkMode, setDarkMode }) => {
           Liked videos
         </Items>
         <hr style={{ height: "1px", color: "grey" }} />
-
+        <Link to="/trends" style={{textDecoration:"none" ,color:"inherit"}}>
         <Items>
           <LocalFireDepartmentOutlinedIcon />
           Trending
-        </Items>
+          </Items>
+          </Link>
+
 
         <hr />
         <Items>
@@ -79,16 +81,17 @@ const Menu = ({ darkMode, setDarkMode }) => {
           Light
         </Items>
         <hr />
-        <Link to="/signin" style={{textDecoration:"none" ,color:"inherit"}}>
-          {" "}
-          <Login>
-            sign in to like and subscribe
-            <Button>
-              <AccountCircleOutlinedIcon />
-              Sign In
-            </Button>
-          </Login>
-        </Link>
+        {user ? user.name : (
+  <Link to="/signin" style={{ textDecoration: "none", color: "inherit" }}>
+  <Login>
+    sign in to like and subscribe
+    <Button>
+      <AccountCircleOutlinedIcon />
+      Sign In
+    </Button>
+  </Login>
+</Link>
+      )}
       </Wrapper>
     </Container>
   );

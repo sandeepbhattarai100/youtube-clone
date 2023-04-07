@@ -7,6 +7,7 @@ const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const videoRoutes = require('./routes/video.routes');
 const commentRoutes = require('./routes/comments.routes');
+const cors = require('cors');
 
 const app = express();
 const connect = async () => {
@@ -21,6 +22,7 @@ const connect = async () => {
     }
 };
 //MIDDLEWARES
+app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
